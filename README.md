@@ -2,6 +2,13 @@
 
 A PHP and MySQL application for managing students, faculty, departments, courses, and enrollments. It includes a separate administrator workspace and student portal.
 
+## Team Members
+
+| Name | UID |
+|---|---|
+| Apurva Anand | 25BCS12080 |
+| Tabish Khan | 25BCS12094 |
+
 ## Screenshots
 
 ### Administrator sign in
