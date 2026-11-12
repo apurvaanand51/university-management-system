@@ -1,0 +1,81 @@
+CREATE DATABASE IF NOT EXISTS university_management
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE university_management;
+
+CREATE TABLE IF NOT EXISTS admins (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS departments (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL UNIQUE,
+  code VARCHAR(20) NOT NULL UNIQUE,
+  description TEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS faculty (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  employee_no VARCHAR(40) NOT NULL UNIQUE,
+  first_name VARCHAR(80) NOT NULL,
+  last_name VARCHAR(80) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  phone VARCHAR(30) NULL,
+  department_id INT UNSIGNED NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_faculty_department FOREIGN KEY (department_id)
+    REFERENCES departments(id) ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS students (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  student_no VARCHAR(40) NOT NULL UNIQUE,
+  first_name VARCHAR(80) NOT NULL,
+  last_name VARCHAR(80) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  phone VARCHAR(30) NULL,
+  department_id INT UNSIGNED NULL,
+  admission_date DATE NULL,
+  status ENUM('Active', 'On leave', 'Graduated') NOT NULL DEFAULT 'Active',
+  password_hash VARCHAR(255) NULL,
+  must_change_password TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_students_department FOREIGN KEY (department_id)
+    REFERENCES departments(id) ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS courses (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  course_code VARCHAR(30) NOT NULL UNIQUE,
+  title VARCHAR(160) NOT NULL,
+  credits TINYINT UNSIGNED NOT NULL,
+  department_id INT UNSIGNED NOT NULL,
+  faculty_id INT UNSIGNED NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_courses_department FOREIGN KEY (department_id)
+    REFERENCES departments(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT fk_courses_faculty FOREIGN KEY (faculty_id)
+    REFERENCES faculty(id) ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS enrollments (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  student_id INT UNSIGNED NOT NULL,
+  course_id INT UNSIGNED NOT NULL,
+  term ENUM('Spring', 'Summer', 'Fall', 'Winter') NOT NULL,
+  academic_year VARCHAR(20) NOT NULL,
+  status ENUM('Enrolled', 'Completed', 'Withdrawn') NOT NULL DEFAULT 'Enrolled',
+  grade VARCHAR(8) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_student_course_term (student_id, course_id, term, academic_year),
+  CONSTRAINT fk_enrollments_student FOREIGN KEY (student_id)
+    REFERENCES students(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_enrollments_course FOREIGN KEY (course_id)
+    REFERENCES courses(id) ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB;
