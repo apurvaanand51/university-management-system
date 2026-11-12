@@ -2,6 +2,38 @@
 
 A PHP and MySQL application for managing students, faculty, departments, courses, and enrollments. It includes a separate administrator workspace and student portal.
 
+## Screenshots
+
+### Administrator sign in
+
+<p align="center">
+  <img src="screenshots/img1.png" width="80%" alt="Administrator sign-in page">
+</p>
+
+### Administrator dashboard
+
+<p align="center">
+  <img src="screenshots/img2.png" width="80%" alt="University management dashboard">
+</p>
+
+### Department management
+
+<p align="center">
+  <img src="screenshots/img3.png" width="80%" alt="Department management page">
+</p>
+
+### Student portal
+
+<p align="center">
+  <img src="screenshots/img4.png" width="80%" alt="Student portal profile and course catalog">
+</p>
+
+### Course catalog and grades
+
+<p align="center">
+  <img src="screenshots/img5.png" width="80%" alt="Student course catalog and enrollment grades">
+</p>
+
 ## Choose how to run it
 
 - **One computer:** Run PHP and MySQL on the same computer. Open the site at `http://localhost:8000`.
